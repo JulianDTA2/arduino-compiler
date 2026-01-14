@@ -1,0 +1,4 @@
+directories:
+  data: ./.arduino15
+  downloads: ./.arduino15/staging
+  user: ./Arduino
