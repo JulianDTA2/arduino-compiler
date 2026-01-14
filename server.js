@@ -21,6 +21,22 @@ const SUPPORTED_BOARDS = {
   'arduino:avr:leonardo': { name: 'Arduino Leonardo', core: 'arduino:avr' },
   'arduino:avr:micro': { name: 'Arduino Micro', core: 'arduino:avr' },
 };
+const CLI = path.join(__dirname, "bin", "arduino-cli");
+const CFG = path.join(__dirname, ".arduino-cli.yaml");
+
+function compile(sketchPath, fqbn) {
+  return new Promise((resolve, reject) => {
+    execFile(
+      CLI,
+      ["--config-file", CFG, "compile", "--fqbn", fqbn, sketchPath],
+      { maxBuffer: 1024 * 1024 * 50 },
+      (err, stdout, stderr) => {
+        if (err) return reject(stderr || stdout || err);
+        resolve(stdout);
+      }
+    );
+  });
+}
 
 // Health check
 app.get('/health', (req, res) => {
